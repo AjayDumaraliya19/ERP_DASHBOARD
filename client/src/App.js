@@ -4,13 +4,11 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { themeSettings } from "theme";
+import Layout from "scenes/layout";
 import Dashboard from "scenes/dashboard";
 
 function App() {
-  const mode = useSelector((state) => {
-    state.global.mode;
-  });
-
+  const mode = useSelector((state) => state?.global?.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
     <div className="app">
@@ -18,10 +16,10 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Routes element={<Layout />}>
+            <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
+            </Route>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

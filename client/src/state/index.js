@@ -4,7 +4,7 @@ const initialState = {
   mode: "dark",
 };
 
-export const globaleSlice = createSlice({
+export const globalSlice = createSlice({
   name: "global",
   initialState,
   reducers: {
@@ -14,6 +14,6 @@ export const globaleSlice = createSlice({
   },
 });
 
-export const { setMode } = globaleSlice.actions;
+export const { setMode } = globalSlice.actions;
 
-export default globaleSlice.reducer;
+export default globalSlice.reducer;
