@@ -10,6 +10,10 @@ import generalRoutes from "./routes/general.route.js";
 import managementRoutes from "./routes/management.route.js";
 import salesRoutes from "./routes/sales.route.js";
 
+/** Data import */
+// import User from "./models/User.model.js";
+// import { dataUser } from "./data/index.js";
+
 /** CONFIGURATION */
 dotenv.config();
 const app = express();
@@ -35,7 +39,13 @@ mongoose
     app.listen(PORT, () => {
       console.log(`Server running on the port ${PORT}`);
     });
+
+    /** Only data onetime */
+    // User.insertMany(dataUser);
   })
   .catch((err) => {
     console.log(`${err} did not connect..!`);
   });
+
+  // A:\My_all_project\Full Stack Project\ERP_Dashboard\server\node_modules\mongodb\lib\bulk\common.js:823
+  
