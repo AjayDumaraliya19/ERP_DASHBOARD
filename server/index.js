@@ -11,8 +11,10 @@ import managementRoutes from "./routes/management.route.js";
 import salesRoutes from "./routes/sales.route.js";
 
 /** Data import */
-// import User from "./models/User.model.js";
-// import { dataUser } from "./data/index.js";
+import User from "./models/User.model.js";
+import Product from "./models/Product.model.js";
+import ProductStat from "./models/ProductStat.model.js";
+import { dataUser, dataProduct, dataProductStat } from "./data/index.js";
 
 /** CONFIGURATION */
 dotenv.config();
@@ -41,11 +43,12 @@ mongoose
     });
 
     /** Only data onetime */
+    // ProductStat.insertMany(dataProductStat);
+    // Product.insertMany(dataProduct);
     // User.insertMany(dataUser);
   })
   .catch((err) => {
     console.log(`${err} did not connect..!`);
   });
 
-  // A:\My_all_project\Full Stack Project\ERP_Dashboard\server\node_modules\mongodb\lib\bulk\common.js:823
-  
+// A:\My_all_project\Full Stack Project\ERP_Dashboard\server\node_modules\mongodb\lib\bulk\common.js:823
