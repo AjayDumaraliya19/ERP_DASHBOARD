@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, useTheme } from "@mui/material";
-import { useGetCustomersQuery } from "state/api";
-import Header from "components/Header";
 import { DataGrid } from "@mui/x-data-grid";
+import { useGetTransactionsQuery } from "state/api";
+import Header from "components/Header";
+import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
-const Customers = () => {
+const Transactions = () => {
   const theme = useTheme();
-  const { data, isLoading } = useGetCustomersQuery();
+
+  /** values to be sent to the backend */
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(20);
+  const [sort, setSort] = useState({});
+  const [search, setSearch] = useState("");
+
+  const [searchInput, setSearchInput] = useState("");
+  const { data, isLoading } = useGetTransactionsQuery({
+    page,
+    pageSize,
+    sort: JSON.stringify(sort),
+    search,
+  });
 
   const columns = [
     {
@@ -15,46 +29,35 @@ const Customers = () => {
       flex: 1,
     },
     {
-      field: "name",
-      headerName: "Name",
-      flex: 0.5,
-    },
-    {
-      field: "email",
-      headerName: "Email",
+      field: "userId",
+      headerName: "User ID",
       flex: 1,
     },
     {
-      field: "phoneNumber",
-      headerName: "Phone Number",
-      flex: 0.5,
-      renderCell: (params) => {
-        return params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "($1) $2 - $3");
-      },
-    },
-    {
-      field: "country",
-      headerName: "Country",
-      flex: 0.4,
-    },
-    {
-      field: "occupation",
-      headerName: "Occupation",
+      field: "createdAt",
+      headerName: "CreatedAt",
       flex: 1,
     },
     {
-      field: "role",
-      headerName: "Role",
+      field: "products",
+      headerName: "# of Products",
       flex: 0.5,
+      sortable: false,
+      renderCell: (params) => params.value.length,
+    },
+    {
+      field: "cost",
+      headerName: "Cost",
+      flex: 1,
+      renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
     },
   ];
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Header title="CUSTOMERS" subtitle="List of Customers" />
+      <Header title="TRANSACTIONS" subtitle="Entire list of transactions" />
       <Box
-        mt="40px"
-        height="75vh"
+        height="80vh"
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",
@@ -83,7 +86,7 @@ const Customers = () => {
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}
-          rows={data || []}
+          rows={(data && data.transactions) || []}
           columns={columns}
         />
       </Box>
@@ -91,4 +94,4 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default Transactions;

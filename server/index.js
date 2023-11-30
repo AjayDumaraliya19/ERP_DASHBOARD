@@ -14,7 +14,13 @@ import salesRoutes from "./routes/sales.route.js";
 import User from "./models/User.model.js";
 import Product from "./models/Product.model.js";
 import ProductStat from "./models/ProductStat.model.js";
-import { dataUser, dataProduct, dataProductStat } from "./data/index.js";
+import Transaction from "./models/Transaction.model.js";
+import {
+  dataUser,
+  dataProduct,
+  dataProductStat,
+  dataTransaction,
+} from "./data/index.js";
 
 /** CONFIGURATION */
 dotenv.config();
@@ -45,10 +51,9 @@ mongoose
     /** Only data onetime */
     // ProductStat.insertMany(dataProductStat);
     // Product.insertMany(dataProduct);
+    // Transaction.insertMany(dataTransaction);
     // User.insertMany(dataUser);
   })
   .catch((err) => {
     console.log(`${err} did not connect..!`);
   });
-
-// A:\My_all_project\Full Stack Project\ERP_Dashboard\server\node_modules\mongodb\lib\bulk\common.js:823

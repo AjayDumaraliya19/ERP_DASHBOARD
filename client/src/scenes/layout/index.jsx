@@ -10,6 +10,7 @@ const Layout = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const userId = useSelector((state) => state.global.userId);
+
   const { data } = useGetUserQuery(userId);
 
   return (
