@@ -15,11 +15,15 @@ import User from "./models/User.model.js";
 import Product from "./models/Product.model.js";
 import ProductStat from "./models/ProductStat.model.js";
 import Transaction from "./models/Transaction.model.js";
+import OverallStat from "./models/OverallStat.model.js";
+import AffiliateStat from "./models/AffiliateStat.js";
 import {
   dataUser,
   dataProduct,
   dataProductStat,
   dataTransaction,
+  dataOverallStat,
+  dataAffiliateStat,
 } from "./data/index.js";
 
 /** CONFIGURATION */
@@ -49,9 +53,11 @@ mongoose
     });
 
     /** Only data onetime */
+    // AffiliateStat.insertMany(dataAffiliateStat);
+    // OverallStat.insertMany(dataOverallStat);
+    // Transaction.insertMany(dataTransaction);
     // ProductStat.insertMany(dataProductStat);
     // Product.insertMany(dataProduct);
-    // Transaction.insertMany(dataTransaction);
     // User.insertMany(dataUser);
   })
   .catch((err) => {

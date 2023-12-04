@@ -2,8 +2,12 @@ import Product from "../models/Product.model.js";
 import ProductStat from "../models/ProductStat.model.js";
 import User from "../models/User.model.js";
 import Transaction from "../models/Transaction.model.js";
+import getCountryIso3 from "country-iso-2-to-3";
 
-/** Create a Get all Product Controller */
+/**
+ * Get all Products controller.
+ * Fetches all products and their respective statistics from the database.
+ */
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -26,7 +30,10 @@ export const getProducts = async (req, res) => {
   }
 };
 
-/** Create a Get all Customers Controller */
+/**
+ * Get all Customers controller.
+ * Fetches all users with the role 'user' from the database.
+ */
 export const getCustomers = async (req, res) => {
   try {
     const customers = await User.find({ role: "user" }).select("-password");
@@ -36,13 +43,16 @@ export const getCustomers = async (req, res) => {
   }
 };
 
-/** Create a Get Transaction Controller */
+/**
+ * Get Transactions controller.
+ * Fetches transactions from the database with optional sorting, pagination, and filtering.
+ */
 export const getTransactions = async (req, res) => {
   try {
-    /** sort should look like this: { "field": "userId", "sort": "desc"} */
+    // sort should look like this: { "field": "userId", "sort": "desc" }
     const { page = 1, pageSize = 20, sort = null, search = "" } = req.query;
 
-    /** formatted sort should look like { userId: -1 } */
+    // formatted sort should look like { userId: -1 }
     const generateSort = () => {
       const sortParsed = JSON.parse(sort);
       const sortFormatted = {
@@ -64,13 +74,45 @@ export const getTransactions = async (req, res) => {
       .limit(pageSize);
 
     const total = await Transaction.countDocuments({
-      name: { $regex: search, $options: "i" },
+      $or: [
+        { cost: { $regex: new RegExp(search, "i") } },
+        { userId: { $regex: new RegExp(search, "i") } },
+      ],
     });
 
     res.status(200).json({
       transactions,
       total,
     });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+/**
+ * Geography controller.
+ * Analyzes user location data and generates a report on user distribution across different countries.
+ */
+export const getGeography = async (req, res) => {
+  try {
+    const users = await User.find();
+
+    const mappedLocations = users.reduce((acc, { country }) => {
+      const countryISO3 = getCountryIso3(country);
+      if (!acc[countryISO3]) {
+        acc[countryISO3] = 0;
+      }
+      acc[countryISO3]++;
+      return acc;
+    }, {});
+
+    const formattedLocations = Object.entries(mappedLocations).map(
+      ([country, count]) => {
+        return { id: country, value: count };
+      }
+    );
+
+    res.status(200).json(formattedLocations);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
